@@ -265,6 +265,11 @@
 
 			api = new KolorEyesIframeAPI('iframeContainer', { events : eventHandlers });
 			
+
+			/*
+			 * The following line shows you how to use the addEventListener way of dealing with events.
+			 * Events types are listed on the KolorEyesIframeAPI.events constant.
+			 */
 			var connectedHandler = function(pEvent)
 			{
 			 	console.log(pEvent.playerAPI.getInstanceId()+' connectedHandler in response to addEventListener');

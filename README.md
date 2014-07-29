@@ -4,7 +4,7 @@ KolorEyesIframeAPI
 Overview
 --------
 
-The Kolor Eyes Iframe API allows you to control an embeded Kolor Eyes player on your website using Javascript.
+The Kolor Eyes Iframe API allows you to control an iframe embeded Kolor Eyes player trough on your website using Javascript.
 
 This API let you do basic actions on the player like play, pause, change the volume level, retrieve information about current playback and so on.
 
@@ -28,10 +28,9 @@ Requirements
 API methods
 -----------
 
-Assuming you have instanciated the Kolor Eyes Iframe API under *api* var name, there is a list of available methods.
-
 To know how to start with the API, you should take a look to our first example.
 
+Assuming you have instanciated the Kolor Eyes Iframe API under *api* var name, there is a list of available methods and theire signatures.
 
 **isConnected**
 
@@ -171,4 +170,81 @@ Accept a string as title.
     api.getUpdatedValues() :object
 Returns (*object*) the full updated object values from the player.
 It contains currentTime, volume, totalTime, fovMin, fovMax, fov, yaw, pitch, projection, isPlaying.
+
+Events
+------
+
+The KolorEyes iframe API lets you listen to some player events and specify handling functions in response to these events.
+
+Two methods are available to work with events.
+
+Events type are listed in the KolorEyesIframeAPI.events constant.
+
+In every handler function you will receive an event object in the first parameter with usefull data like a reference to the API.
+
+
+## Method A
+
+The easiest and the most classical way to deal with events on Javascript : a single callback function for each event.
+You can pass your handling functions on the 'events' object at the instanciation time, like on the first code exemple of this repository, or you can override handlers at the runtime, defining new functions for specific events.
+
+**onConnected**
+
+    api.onConnected()
+This event is fired when the API is connected to the Iframe, it generally a good place to place your initialization code. 
+
+**onPlay**
+
+    api.onPlay()
+This event is fired when the video starts playing.
+
+**onPause**
+
+    api.onPause()
+This event is fired when the user pauses the video playback.
+
+**onVolumeChange**
+
+    api.onVolumeChange()
+This event is fired when the volume changes.
+
+**onEnded**
+
+    api.onEnded()
+This event is fired when the video ends.
+
+**onLoadedMetaData**
+
+    api.onLoadedMetaData()
+This event is fired when the meta date is loaded.
+
+**onProjectionChange**
+
+    api.onProjectionChange()
+This event is fired when the camera projection changes.
+
+**onSeek**
+
+    api.onSeek()
+This event is fired when the users seek through the video.
+
+
+## Method B
+
+The second method is made of event listeners. You can add and remove event listeners at the runtime.
+This way you can bind multiple handlers for a single event type.
+
+To function are available to this :
+
+**addEventListener**
+
+    api.addEventListener(eventType:string, handlerFunction:function) :void
+Add an event listener for a given type of event. 
+The handler function will be executed when the event type occured.
+All event types are listed on the static variable : KolorEyesIframeAPI.events
+
+**removeEventListener**
+
+    api.removeEventListener(eventType:string, handlerFunction:function) :void
+Remove an event listener for a given event type / handler. 
 
