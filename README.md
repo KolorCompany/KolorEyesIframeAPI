@@ -159,12 +159,28 @@ Disable all or a part of the player UI.
 Accepts a string or an array of UI parts, available UI parts are described in KolorEyesIframeAPI.UI constant.
 If no options are passed in arguments, all the UI will be disabled.
 
+**showUI**
+
+    api.showUI() :void
+Shows the UI if it was previously hidden by hideUI.
+
+**hideUI**
+
+    api.hideUI() :void
+Hides the UI.
+
 **setTitle**
 
     api.setTitle(title:string) :void
 Sets the video title that will be displayed in the player UI.
 Accept a string as title.
-	
+
+**setVelocity**
+
+    api.setVelocity(velocuty:number) :void
+Sets the mouse velocity or sensitivity if you want to have a slower mouse velocity than the original value.
+Default value is set to 10. It is not recommended to set an higher value than the default one, most people aren't hardcore gamers :)
+
 **getUpdatedValues**
 
     api.getUpdatedValues() :object
