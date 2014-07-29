@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Kolor Eyes Iframe API</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+<body>
+	
+	<div class="mainContainer">
+
+		<!-- Container for the iframe, the ID is important for the API instanciation -->
+		<div id="iframeContainer"  style="float: left;">
+
+			<!-- 
+			Distant beta verion of the kolor eyes player, the only difference with the production source is the /beta/ 
+			For now, the iframe API is only available on the beta version.
+			-->
+			<iframe class="kolorEyesIframe" src="http://eyes.kolor.com/fr/i/beta/846775716f45c58221bb265eeb74e4df" type="text/html" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen="true"> 
+			</iframe>
+			
+		</div>
+
+		<div id="rightColumn">
+
+			<div style="padding:8px;">
+
+				<h1>Iframe API demo</h1>
+
+				<p>
+					This page demonstrate how to instanciate and use the Kolor Eyes Iframe API
+				</p>
+
+				<p>
+					The user interface below displays values pulled from the player iframe. You can also give orders like play, pause or change the projection.
+				</p>
+
+			</div>
+
+			<div id="iframeAPI" class="iframeApiContainer">
+
+				<button id="playPauseBtn" onclick="playPauseBtn()">Play</button>
+
+				<select id="projectionSelect" onchange="projectionSelectChange(event)">
+					<option value="spherical">Source</option>
+					<option value="planar" selected="selected">Rectilinear</option>
+					<option value="panini">Panini</option>
+					<option value="littlePlanet">Little planet</option>
+					<option value="fisheye">Fisheye</option>
+					<option value="mirrorBall">Mirror ball</option>
+				</select>
+
+				<hr/>
+
+				<p>
+					<span>Current time :</span><span id="currentTime">0</span>
+				</p>
+
+				<p>
+					<span>Total time :</span><span id="totalTime">0</span>
+				</p>
+
+				<p>
+					<span>Volume :</span><span id="volume">0</span>
+				</p>
+
+				<p>
+					<span>Fov :</span><span id="fov">0</span>
+				</p>
+
+				<p>
+					<span>Yaw :</span><span id="yaw">0</span>
+				</p>
+
+				<p>
+					<span>Pitch :</span><span id="pitch">0</span>
+				</p>
+
+				<p>
+					<span>Playing :</span><span id="isPlaying">false</span>
+				</p>
+
+				<hr/>
+
+				<p>
+					<span>Player :</span><span id="playerVersion">---</span>
+				</p>
+
+				<p>
+					<span>API page :</span><span id="apiClientVersion">---</span>
+				</p>
+
+				<p>
+					<span>API iframe :</span><span id="apiServerVersion">---</span>
+				</p>
+
+			</div>
+
+
+		</div>
+
+		<div style="clear:both;"></div>
+
+	</div>
+
+
+	<script type="text/javascript">
+
+		//There is a main loop in this demo to pull data from the api, this variable handle the interval.
+		var mainLoopInterval = null;
+
+		//This variable will handle our instance of kolor eyes programming interface (kepi)
+		var api = null;
+
+		/*
+		 * 1/ Event handlers
+		 * 
+		 * We define some handler functions here that we'll pass to the API in the constructor.
+		 * That why we declares these function at the beginning of our script, before instanciating the API.
+		 * Each handlers receive an event object that keeps a reference to the API
+		 * Many of these functions just log something in the console for the demo & test purpose.
+		 */
+
+		/*
+		 * onConnectedHandler fires when the API succesfully connect to the iframe content.
+		 *	We displays the player version and version of the both parts of the API (one part in your web page, the other is in the iframe)
+		 */
+		var onConnectedHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On connected handler');
+
+			var p0 = document.getElementById("playerVersion");
+			p0.innerHTML = pEvent.data["playerVersion"];
+
+			var p1 = document.getElementById("apiClientVersion");
+			p1.innerHTML = pEvent.data["apiClientVersion"];
+
+			var p2 = document.getElementById("apiServerVersion");
+			p2.innerHTML = pEvent.data["apiServerVersion"];
+
+			mainLoopInterval = window.setInterval(mainLoop, 30);
+		}
+
+		/*
+		 * onPlayHandler fires when the video begins to play. 
+		 * We just change the label of the external play/pause button
+		 */
+		var onPlayHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On play handler | isPlaying = '+pEvent.playerAPI.isPlaying());
+
+			var p = document.getElementById('playPauseBtn');
+			p.innerHTML = 'Pause';
+		}
+
+		/*
+		 * onPauseHandler fires when the video playback is paused. 
+		 * We just change the label of the external play/pause button
+		 */
+		var onPauseHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On pause handler | isPlaying = '+pEvent.playerAPI.isPlaying());
+
+			var p = document.getElementById('playPauseBtn');
+			p.innerHTML = 'Play';
+		}
+
+		/*
+		 * onSeekHandler fires when the user changes the current playback time. 
+		 */
+		var onSeekHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On seek handler | time = '+pEvent.playerAPI.getCurrentTime());
+		}
+
+		/*
+		 * onVolumeChangeHandler fires when the volume amount changed. 
+		 */
+		var onVolumeChangeHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On volume change handler | volume = '+pEvent.playerAPI.getVolume());
+		}
+
+		/*
+		 * onVolumeChangeHandler fires when the volume amount changed. 
+		 */
+		var onEndedHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On ended handler');
+		}
+
+		
+		var onLoadedMetadataHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On Loaded meta data | total time = '+pEvent.playerAPI.getTotalTime());
+		}
+
+		/*
+		 * onProjectionChangeHandler fires when the video projection mode changed.
+		 * We update the selected index of the external projection select. 
+		 */
+		var onProjectionChangeHandler = function(pEvent)
+		{
+			console.log(pEvent.playerAPI.getInstanceId()+' :: On projection change handler | projection = '+pEvent.playerAPI.getProjection());
+
+			var s = document.getElementById('projectionSelect');
+			var p = pEvent.playerAPI.getProjection();
+			var selectedIndex = -1;
+
+			for(var i=0, ii=s.options.length; i<ii; i++)
+			{
+				if(s.options[i].value === p)
+				{
+					selectedIndex = i;
+					break;
+				}
+			}
+
+			s.selectedIndex = selectedIndex;
+		}
+
+		/*
+		 * This object will kepp a reference to the previous declared handlers
+		 * We'll pass it to the constructor
+		 */
+		var eventHandlers = 
+		{
+			'onConnected' : onConnectedHandler,
+			'onPlay' : onPlayHandler,
+			'onPause' : onPauseHandler,
+			'onVolumeChange' : onVolumeChangeHandler,
+			'onEnded' : onEndedHandler,
+			'onLoadedMetaData' : onLoadedMetadataHandler,
+			'onProjectionChange' : onProjectionChangeHandler,
+			'onSeek' : onSeekHandler
+		}
+
+
+
+
+		/*
+		 * 2/ Loading the API
+		 *
+		 * These lines dynamically load the API on your page side.
+		 * Note that the URL is only available with the beta version for now.
+		 */
+		var script = document.createElement('script');
+		script.src = "http://cdn-eyes.kolor.com/KolorEyesPlayerBeta/KolorEyesIframeAPI.min.js";
+		var firstScript = document.getElementsByTagName('script')[0];
+		firstScript.parentNode.insertBefore(script, firstScript);
+		
+		
+
+		/*
+		 * 3/ Waiting for the API to be ready !
+		 *
+		 * This function is the most important one. 
+		 * Once the API will be loaded, the script will search for this function and execute it.
+		 * This is the best place to instanciate the API and add some handlers.
+		 */
+		function onKolorEyesIframeAPIReady()
+		{
+			console.log('onKolorEyesIframeAPIReady !');
+
+			api = new KolorEyesIframeAPI('iframeContainer', { events : eventHandlers });
+			
+			var connectedHandler = function(pEvent)
+			{
+			 	console.log(pEvent.playerAPI.getInstanceId()+' connectedHandler in response to addEventListener');
+			};
+			api.addEventListener(KolorEyesIframeAPI.events.ON_CONNECTED, connectedHandler);
+
+			var playEventHandler = function(pEvent)
+			{
+			 	console.log(pEvent.playerAPI.getInstanceId()+' playEventHandler in response to addEventListener');
+			};
+			api.addEventListener(KolorEyesIframeAPI.events.ON_PLAY, playEventHandler);
+		}	
+
+		
+
+		/*
+		 * 4/ Our example external UI
+		 *
+		 * The following functions are for the external UI in the right column
+		 * Most of the functions care about updating values of the UI every time the main loop is executed.
+		 */
+		
+		function mainLoop()
+		{
+			updateCurrentTime();
+			updateTotalTime();
+			updateVolume();
+			updateFov();
+			updateYaw();
+			updatePitch();
+			updateIsPlaying();
+		};
+
+		function updateCurrentTime()
+		{
+			var v = api.getCurrentTime().toFixed(2);
+			var p = document.getElementById('currentTime');
+			p.innerHTML = v;
+		}
+
+		function updateTotalTime()
+		{
+			var v = api.getTotalTime().toFixed(2);
+			var p = document.getElementById('totalTime');
+			p.innerHTML = v;
+		}
+
+		function updateVolume()
+		{
+			var v = api.getVolume().toFixed(2);
+			var p = document.getElementById('volume');
+			p.innerHTML = v;
+		}
+
+		function updateFov()
+		{
+			var v = api.getFov().toFixed(2);
+			var p = document.getElementById('fov');
+			p.innerHTML = v;
+		}
+
+		function updateYaw()
+		{
+			var v = api.getYaw().toFixed(2);
+			var p = document.getElementById('yaw');
+			p.innerHTML = v;
+		}
+
+		function updatePitch()
+		{
+			var v = api.getPitch().toFixed(2);
+			var p = document.getElementById('pitch');
+			p.innerHTML = v;
+		}
+
+		function updateIsPlaying()
+		{
+			var v = api.isPlaying();
+			var p = document.getElementById('isPlaying');
+			p.innerHTML = v;
+		}
+
+		function playPauseBtn()
+		{
+			api.togglePlayback();
+		}
+
+		function projectionSelectChange(pEvent)
+		{
+			var s = pEvent.target;
+			var p = s.options[s.selectedIndex].value;
+			api.setProjection(p);
+		}
+
+	</script>
+
+</body>
+</html>
