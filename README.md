@@ -169,6 +169,21 @@ Shows the UI if it was previously hidden by hideUI.
     api.hideUI() :void
 Hides the UI.
 
+**toggleShowSource**
+    
+    api.toggleShowSource() :void
+Toggles the display of the bottom source view. This feature is only available when using the HTML5 player.
+
+**showSource**
+    
+    api.showSource() :void
+Shows the bottom source view. This feature is only available when using the HTML5 player.
+
+**hideSource**
+    
+    api.hideSource() :void
+Hides the bottom source view. This feature is only available when using the HTML5 player.
+
 **setTitle**
 
     api.setTitle(title:string) :void
@@ -263,4 +278,26 @@ All event types are listed on the static variable : KolorEyesIframeAPI.events
 
     api.removeEventListener(eventType:string, handlerFunction:function) :void
 Remove an event listener for a given event type / handler. 
+
+
+Release note
+------------
+
+## 1.0.0.104
+
+- Bug fix of the wrong values retuned by getter due to the asynchronous API.
+Now you can get a value, set another new value and re-get the value. It's up to date.
+
+- Bug fix of the onLoadedMetaData event randomly fired.
+
+- Add of some new methods to display the source bottom view (toogleShowSource, showSource, hideSource)
+
+## 1.0.0.103
+
+- Add a new method to set the velocity of the camera.
+
+- Add new methods to show or hide the UI (showUI, hideUI).
+
+- Improved compatibility with IE
+
 
