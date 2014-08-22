@@ -192,7 +192,7 @@ Accept a string as title.
 
 **setVelocity**
 
-    api.setVelocity(velocuty:number) :void
+    api.setVelocity(velocity:number) :void
 Sets the mouse velocity or sensitivity if you want to have a slower mouse velocity than the original value.
 Default value is set to 10. It is not recommended to set an higher value than the default one, most people aren't hardcore gamers :)
 
