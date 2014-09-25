@@ -202,6 +202,12 @@ Default value is set to 10. It is not recommended to set an higher value than th
 Returns (*object*) the full updated object values from the player.
 It contains currentTime, volume, totalTime, fovMin, fovMax, fov, yaw, pitch, projection, isPlaying.
 
+**setUpdateRate**
+
+    api.setUpdateRate(rate:number) :void
+Sets the update rate of values for getters function in milliseconds.
+The default rate is 100ms. 
+
 Events
 ------
 
@@ -259,6 +265,11 @@ This event is fired when the camera projection changes.
     api.onSeek()
 This event is fired when the users seek through the video.
 
+**onValuesUpdated**
+
+    api.onValuesUpdated()
+This event is fired every time the api send the updated values
+
 
 ## Method B
 
@@ -283,6 +294,12 @@ Remove an event listener for a given event type / handler.
 Release note
 ------------
 
+## 1.0.0.105
+
+- Add the onValuesUpdated events ( KolorEyesIframeAPI.events.ON_VALUES_UPDATED )
+
+- Add the setUpdateRate method 
+
 ## 1.0.0.104
 
 - Bug fix of the wrong values retuned by getter due to the asynchronous API.
@@ -299,5 +316,6 @@ Now you can get a value, set another new value and re-get the value. It's up to 
 - Add new methods to show or hide the UI (showUI, hideUI).
 
 - Improved compatibility with IE
+
 
 
