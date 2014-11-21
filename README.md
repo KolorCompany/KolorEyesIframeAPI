@@ -110,17 +110,29 @@ Sets the current camera FOV value (Field Of View) in degrees.
 **getYaw**
 
     api.getYaw() :number
-Returns (*number*) the current camera Yaw value in degrees.
+Returns (*number*) the current camera Yaw value in degrees. Yaw is the rotation of the camera around the horizontal axis, its value is between -180 and +180 degrees.
+
+**setYaw**
+
+    api.setYaw(yaw:number) :void
+Sets the current camera Yaw value in degrees. Yaw is the rotation of the camera around the horizontal axis, its value is between -180 and +180 degrees.
 
 **getPitch**
 
     api.getPitch() :number
-Returns (*number*) the current camera Pitch value in degrees.
+Returns (*number*) the current camera Pitch value in degrees. Pitch is the rotation of the camera around the vertical axis, its value is between -90 and +90 degrees.
+
+**setPitch**
+
+    api.setPitch(pitch:number) :void
+Sets the current camera Pitch value in degrees. Pitch is the rotation of the camera around the vertical axis, its value is between -90 and +90 degrees.
 
 **lookAt**
 
     api.lookAt(yaw:number, pitch:number) :void
-Sets camera Yaw and Pitch at the same time. Accepts Yaw and Pitch values in degrees.	
+Sets camera Yaw and Pitch at the same time. Accepts Yaw and Pitch values in degrees.
+Yaw is the rotation of the camera around the horizontal axis, its value is between -180 and +180 degrees.
+Pitch is the rotation of the camera around the vertical axis, its value is between -90 and +90 degrees.	
 
 **getProjection**
 
