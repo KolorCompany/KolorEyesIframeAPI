@@ -277,6 +277,11 @@ This event is fired when the camera projection changes.
     api.onSeek()
 This event is fired when the users seek through the video.
 
+**onDisplaySourceChanged**
+ 
+    api.onDisplaySourceChanged()
+This event notifies you that the user display or hide the source view (available only in webGL)
+
 **onValuesUpdated**
 
     api.onValuesUpdated()
