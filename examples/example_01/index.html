@@ -14,10 +14,9 @@
 		<div id="iframeContainer"  style="float: left;">
 
 			<!-- 
-			Distant beta verion of the kolor eyes player, the only difference with the production source is the /beta/ 
-			For now, the iframe API is only available on the beta version.
+			Your iframe needs to have the kolorEyesIframe class
 			-->
-			<iframe class="kolorEyesIframe" src="http://eyes.kolor.com/fr/i/beta/846775716f45c58221bb265eeb74e4df" type="text/html" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen="true"> 
+			<iframe class="kolorEyesIframe" src="http://eyes.kolor.com/video/i/kolor/846775716f45c58221bb265eeb74e4df" type="text/html" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen="true"> 
 			</iframe>
 			
 		</div>
@@ -246,7 +245,7 @@
 		 * Note that the URL is only available with the beta version for now.
 		 */
 		var script = document.createElement('script');
-		script.src = "http://cdn-eyes.kolor.com/KolorEyesPlayerBeta/KolorEyesIframeAPI.min.js";
+		script.src = "http://eyes.kolor.com/API/KolorEyesPlayer/current/KolorEyesIframeAPI.min.js";
 		var firstScript = document.getElementsByTagName('script')[0];
 		firstScript.parentNode.insertBefore(script, firstScript);
 		

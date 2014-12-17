@@ -15,7 +15,7 @@ You'll find examples on how to use the Kolor Eyes Iframe API in this GitHub repo
 Requirements
 ------------
 
-1. An account on Kolor's [360 video hosting platform](http://eyes.kolor.com/en/login). It is on beta stage for now, get in touch with us to get an access.
+1. An account on Kolor's [360 video hosting platform](http://eyes.kolor.com/register). 
 2. An uploaded 360 video on our 360 video hosting solution.
 3. A browser that supports the HTML5 postMessage feature:
 
@@ -306,9 +306,15 @@ Remove an event listener for a given event type / handler.
 Release note
 ------------
 
+## 1.0.0.106
+
+- Add the onDisplaySourceChanged event that notify you when the user displays or hides the source view ( KolorEyesIframeAPI.events.ON_DISPLAY_SOURCE_CHANGED )
+
+- Updated the demo for the Kolor Eyes Hosting beta v2.
+
 ## 1.0.0.105
 
-- Add the onValuesUpdated events ( KolorEyesIframeAPI.events.ON_VALUES_UPDATED )
+- Add the onValuesUpdated event ( KolorEyesIframeAPI.events.ON_VALUES_UPDATED )
 
 - Add the setUpdateRate method 
 
