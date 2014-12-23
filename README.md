@@ -4,9 +4,9 @@ KolorEyesIframeAPI
 Overview
 --------
 
-The Kolor Eyes Iframe API allows you to control an iframe embeded Kolor Eyes player trough on your website using Javascript.
+The Kolor Eyes Iframe API allows you to control an iFrame embeded Kolor Eyes player through on your website using Javascript.
 
-This API let you do basic actions on the player like play, pause, change the volume level, retrieve information about current playback and so on.
+This API lets you do basic actions on the player like play, pause, change the volume level, retrieve information about current playback and so on.
 
 You can also set custom callbacks and event listeners that will execute in response to player events.
 
@@ -28,9 +28,9 @@ Requirements
 API methods
 -----------
 
-To know how to start with the API, you should take a look to our first example.
+To know how to start with the API, you should take a look at our first example.
 
-Assuming you have instanciated the Kolor Eyes Iframe API under *api* var name, there is a list of available methods and theire signatures.
+Assuming you have instantiated the Kolor Eyes Iframe API under *api* var name, there is a list of available methods and their signatures.
 
 **isConnected**
 
@@ -234,7 +234,7 @@ In every handler function you will receive an event object in the first paramete
 
 ## Method A
 
-The easiest and the most classical way to deal with events on Javascript : a single callback function for each event.
+The easiest and the most common way to deal with events on Javascript : a single callback function for each event.
 You can pass your handling functions on the 'events' object at the instanciation time, like on the first code exemple of this repository, or you can override handlers at the runtime, defining new functions for specific events.
 
 **onConnected**
