@@ -311,6 +311,10 @@ Remove an event listener for a given event type / handler.
 Release note
 ------------
 
+## 1.0.0.400
+
+- Add compatibility for https
+
 ## 1.0.0.106
 
 - Add the onDisplaySourceChanged event that notify you when the user displays or hides the source view ( KolorEyesIframeAPI.events.ON_DISPLAY_SOURCE_CHANGED )
