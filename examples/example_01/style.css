@@ -121,10 +121,39 @@ div.iframeApiContainer
 	border-radius: 7px;
 
 	padding: 8px;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 div.iframeApiContainer p
 {
 	height: 16px;
+}
+
+/* The container where we display the logs from the iframe API*/
+div#iframeLog
+{
+	background-color: #fff;
+
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+
+	padding: 8px;
+	margin-top: 10px;
+
+	height:150px; 
+	overflow-y: scroll;
+}
+
+div#iframeLog p
+{
+	height: 10px;
+}
+
+div#iframeLog hr
+{
+	height: 1px;
+	border: 0px;
+	margin: 2px;
+	background-color: #bbb;
 }

@@ -146,6 +146,21 @@ Sets the current camera projection type.
 Accepts a string.
 Available projections are listed in KolorEyesIframeAPI.projections constant.
 
+**getVideoQualityCount**
+    
+    api.getVideoQualityCount() :number
+Returns (*number*) the count of quality streams available for the video.
+
+**getVideoQuality**
+
+    api.getVideoQuality() :number
+Returns (*number*) the current index of video quality (starts at 0).
+
+**setVideoQuality**
+
+    api.setVideoQuality(index:number)
+Sets the current video quality index if it's available.
+
 **isPlaying**
 
     api.isPlaying() :boolean
@@ -218,7 +233,19 @@ It contains currentTime, volume, totalTime, fovMin, fovMax, fov, yaw, pitch, pro
 
     api.setUpdateRate(rate:number) :void
 Sets the update rate of values for getters function in milliseconds.
-The default rate is 100ms. 
+The default rate is 100ms.
+
+**getPlayerCoreType**
+
+    api.getPlayerCoreType() :string
+Returns (*string*) the player core type, it can be either "webgl" or "flash".
+These values are listed in the constant KolorEyesIframeAPI.coreTypes
+
+**kill**
+
+    api.kill() :void
+Kills the connection of the Iframe API
+
 
 Events
 ------
@@ -237,10 +264,15 @@ In every handler function you will receive an event object in the first paramete
 The easiest and the most common way to deal with events on Javascript : a single callback function for each event.
 You can pass your handling functions on the 'events' object at the instanciation time, like on the first code exemple of this repository, or you can override handlers at the runtime, defining new functions for specific events.
 
+**onReady**
+
+    api.onReady()
+This event is fired when the 360 player is ready, this is the best entry point for you to place your initialization code.
+
 **onConnected**
 
     api.onConnected()
-This event is fired when the API is connected to the Iframe, it generally a good place to place your initialization code. 
+This event is fired when the API is connected to the Iframe. 
 
 **onPlay**
 
@@ -307,40 +339,70 @@ All event types are listed on the static variable : KolorEyesIframeAPI.events
     api.removeEventListener(eventType:string, handlerFunction:function) :void
 Remove an event listener for a given event type / handler. 
 
+The event types are stored in KolorEyesIframeAPI.events constant 
+
+    KolorEyesIframeAPI.events.ON_CONNECTED
+    KolorEyesIframeAPI.events.ON_READY
+    KolorEyesIframeAPI.events.ON_PLAY
+    KolorEyesIframeAPI.events.ON_PAUSE
+    KolorEyesIframeAPI.events.ON_VOLUME_CHANGE
+    KolorEyesIframeAPI.events.ON_ENDED
+    KolorEyesIframeAPI.events.ON_LOADED_META_DATA
+    KolorEyesIframeAPI.events.ON_PROJECTION_CHANGE
+    KolorEyesIframeAPI.events.ON_SEEK
+    KolorEyesIframeAPI.events.ON_VALUES_UPDATED
+    KolorEyesIframeAPI.events.ON_DISPLAY_SOURCE_CHANGED
+    KolorEyesIframeAPI.events.ON_VIDEO_QUALITY_CHANGED
 
 Release note
 ------------
 
+## 1.1.0.400
+
+- Added the onReady event that notifies you when the player is ready, this is the best entry point to begin !
+
+- Added the onVideoQualityChanged event to know when the user change the quality stream index.
+
+- Added a method to get the number of quality streams available for the current video : getVideoQualityCount
+
+- Added a method to get and set the current quality index to play : getVideoQuality / setVideoQuality 
+
+- Added a method to get the player core type (webgl or flash) : getPlayerCoreType
+
+- Added a method kill() to kill the connection of the Iframe API
+
+- Updated the example to demonstrate some of new features
+
 ## 1.0.0.400
 
-- Add compatibility for https
+- Added compatibility for https
 
 ## 1.0.0.106
 
-- Add the onDisplaySourceChanged event that notify you when the user displays or hides the source view ( KolorEyesIframeAPI.events.ON_DISPLAY_SOURCE_CHANGED )
+- Added the onDisplaySourceChanged event that notifies you when the user displays or hides the source view ( KolorEyesIframeAPI.events.ON_DISPLAY_SOURCE_CHANGED )
 
 - Updated the demo for the Kolor Eyes Hosting beta v2.
 
 ## 1.0.0.105
 
-- Add the onValuesUpdated event ( KolorEyesIframeAPI.events.ON_VALUES_UPDATED )
+- Added the onValuesUpdated event ( KolorEyesIframeAPI.events.ON_VALUES_UPDATED )
 
-- Add the setUpdateRate method 
+- Added the setUpdateRate method 
 
 ## 1.0.0.104
 
-- Bug fix of the wrong values retuned by getter due to the asynchronous API.
+- Bug fixed of the wrong values retuned by getter due to the asynchronous API.
 Now you can get a value, set another new value and re-get the value. It's up to date.
 
-- Bug fix of the onLoadedMetaData event randomly fired.
+- Bug fixed of the onLoadedMetaData event randomly fired.
 
-- Add of some new methods to display the source bottom view (toogleShowSource, showSource, hideSource)
+- Added of some new methods to display the source bottom view (toogleShowSource, showSource, hideSource)
 
 ## 1.0.0.103
 
-- Add a new method to set the velocity of the camera.
+- Added a new method to set the velocity of the camera.
 
-- Add new methods to show or hide the UI (showUI, hideUI).
+- Added new methods to show or hide the UI (showUI, hideUI).
 
 - Improved compatibility with IE
 

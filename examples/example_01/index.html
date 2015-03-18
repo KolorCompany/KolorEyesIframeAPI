@@ -16,7 +16,7 @@
 			<!-- 
 			Your iframe needs to have the kolorEyesIframe class
 			-->
-			<iframe class="kolorEyesIframe" src="https://eyes.kolor.com/video/i/kolor/846775716f45c58221bb265eeb74e4df" type="text/html" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen="true"> 
+			<iframe class="kolorEyesIframe" src="http://eyes.kolor.com/video/i/kolor/846775716f45c58221bb265eeb74e4df" type="text/html" width="100%" height="100%" frameborder="0" scrolling="no" allowfullscreen="true"> 
 			</iframe>
 			
 		</div>
@@ -48,6 +48,9 @@
 					<option value="littlePlanet">Little planet</option>
 					<option value="fisheye">Fisheye</option>
 					<option value="mirrorBall">Mirror ball</option>
+				</select>
+
+				<select id="qualitySelect" onchange="qualitySelectChange(event)">
 				</select>
 
 				<hr/>
@@ -83,7 +86,11 @@
 				<hr/>
 
 				<p>
-					<span>Player :</span><span id="playerVersion">---</span>
+					<span>Player version :</span><span id="playerVersion">---</span>
+				</p>
+
+				<p>
+					<span>Player core :</span><span id="playerCoreType">---</span>
 				</p>
 
 				<p>
@@ -96,13 +103,17 @@
 
 			</div>
 
+			<h1>Iframe API Log</h1>
+
+			<div id="iframeLog">
+			</div>
+
 
 		</div>
 
 		<div style="clear:both;"></div>
 
 	</div>
-
 
 	<script type="text/javascript">
 
@@ -128,6 +139,7 @@
 		var onConnectedHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On connected handler');
+			log("Iframe API connected !");
 
 			var p0 = document.getElementById("playerVersion");
 			p0.innerHTML = pEvent.data["playerVersion"];
@@ -137,9 +149,25 @@
 
 			var p2 = document.getElementById("apiServerVersion");
 			p2.innerHTML = pEvent.data["apiServerVersion"];
+		};
 
+		/*
+		 * onReadyHandler fires when the Kolor Eyes Player will be ready
+		 * This is the best place to put your initialization code !
+		 */
+		var onReadyHandler = function(pEvent)
+		{
+			log("Player is ready !");
+
+			//Here we just define the loop that'll pull values to update the UI
 			mainLoopInterval = window.setInterval(mainLoop, 30);
-		}
+
+			//Update the display of the player core type (webgl or flash)
+			var p = document.getElementById("playerCoreType");
+			p.innerHTML = api.getPlayerCoreType();
+
+			createQualityMenu();
+		};
 
 		/*
 		 * onPlayHandler fires when the video begins to play. 
@@ -148,10 +176,11 @@
 		var onPlayHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On play handler | isPlaying = '+pEvent.playerAPI.isPlaying());
+			log("Video played");
 
 			var p = document.getElementById('playPauseBtn');
 			p.innerHTML = 'Pause';
-		}
+		};
 
 		/*
 		 * onPauseHandler fires when the video playback is paused. 
@@ -160,10 +189,11 @@
 		var onPauseHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On pause handler | isPlaying = '+pEvent.playerAPI.isPlaying());
+			log("Video paused");
 
 			var p = document.getElementById('playPauseBtn');
 			p.innerHTML = 'Play';
-		}
+		};
 
 		/*
 		 * onSeekHandler fires when the user changes the current playback time. 
@@ -171,7 +201,8 @@
 		var onSeekHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On seek handler | time = '+pEvent.playerAPI.getCurrentTime());
-		}
+			log("Video seek");
+		};
 
 		/*
 		 * onVolumeChangeHandler fires when the volume amount changed. 
@@ -179,7 +210,8 @@
 		var onVolumeChangeHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On volume change handler | volume = '+pEvent.playerAPI.getVolume());
-		}
+			log("Volume changed");
+		};
 
 		/*
 		 * onVolumeChangeHandler fires when the volume amount changed. 
@@ -187,13 +219,15 @@
 		var onEndedHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On ended handler');
-		}
+			log("Video ended");
+		};
 
 		
 		var onLoadedMetadataHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On Loaded meta data | total time = '+pEvent.playerAPI.getTotalTime());
-		}
+			log("Metadata loaded");
+		};
 
 		/*
 		 * onProjectionChangeHandler fires when the video projection mode changed.
@@ -202,6 +236,7 @@
 		var onProjectionChangeHandler = function(pEvent)
 		{
 			console.log(pEvent.playerAPI.getInstanceId()+' :: On projection change handler | projection = '+pEvent.playerAPI.getProjection());
+			log("Projection changed");
 
 			var s = document.getElementById('projectionSelect');
 			var p = pEvent.playerAPI.getProjection();
@@ -217,7 +252,19 @@
 			}
 
 			s.selectedIndex = selectedIndex;
-		}
+		};
+
+		var onDisplaySourceChangedHandler = function(pEvent)
+		{
+			log("Source display changed");
+		};
+
+		var onVideoQualityChangedHandler = function(pEvent)
+		{
+			log("Video quality changed : " + pEvent.data.index);
+
+			document.getElementById("qualitySelect").selectedIndex = pEvent.data.index;
+		};
 
 		/*
 		 * This object will kepp a reference to the previous declared handlers
@@ -226,15 +273,17 @@
 		var eventHandlers = 
 		{
 			'onConnected' : onConnectedHandler,
+			'onReady': onReadyHandler,
 			'onPlay' : onPlayHandler,
 			'onPause' : onPauseHandler,
 			'onVolumeChange' : onVolumeChangeHandler,
 			'onEnded' : onEndedHandler,
 			'onLoadedMetaData' : onLoadedMetadataHandler,
 			'onProjectionChange' : onProjectionChangeHandler,
-			'onSeek' : onSeekHandler
-		}
-
+			'onSeek' : onSeekHandler,
+			'onDisplaySourceChanged' : onDisplaySourceChangedHandler,
+			'onVideoQualityChanged' : onVideoQualityChangedHandler
+		};
 
 
 
@@ -268,17 +317,20 @@
 			/*
 			 * The following line shows you how to use the addEventListener way of dealing with events.
 			 * Events types are listed on the KolorEyesIframeAPI.events constant.
+			 * Prefer this if you want to have multiple handlers for one type of event, you can add and remove them like this :
+			 * In this example I want to log the fist hit of the play button and only the first so I have to remove the listener in the handler function :)
 			 */
-			var connectedHandler = function(pEvent)
-			{
-			 	console.log(pEvent.playerAPI.getInstanceId()+' connectedHandler in response to addEventListener');
-			};
-			api.addEventListener(KolorEyesIframeAPI.events.ON_CONNECTED, connectedHandler);
 
+			//Define an handler function
 			var playEventHandler = function(pEvent)
 			{
-			 	console.log(pEvent.playerAPI.getInstanceId()+' playEventHandler in response to addEventListener');
+			 	console.log(pEvent.playerAPI.getInstanceId()+' playEventHandler in response to addEventListener / First play');
+			 	log("First play !");
+
+			 	//Remove the listener so the handler will only trigger once ! On the first play 
+			 	api.removeEventListener(KolorEyesIframeAPI.events.ON_PLAY, playEventHandler);
 			};
+			//Register the handler function as an event listener  (eventType, eventHandler) 
 			api.addEventListener(KolorEyesIframeAPI.events.ON_PLAY, playEventHandler);
 		}	
 
@@ -300,7 +352,7 @@
 			updateYaw();
 			updatePitch();
 			updateIsPlaying();
-		};
+		}
 
 		function updateCurrentTime()
 		{
@@ -361,6 +413,44 @@
 			var s = pEvent.target;
 			var p = s.options[s.selectedIndex].value;
 			api.setProjection(p);
+		}
+
+		function createQualityMenu()
+		{
+			var s = document.getElementById('qualitySelect');
+			var o; 
+
+			for(var i=0, ii=api.getVideoQualityCount(); i<ii; i++)
+			{
+				o = document.createElement("option");
+				o.innerHTML = "Video quality " + i;
+				o.value = i;
+
+				if(i == api.getVideoQuality())
+					o.selected = true;
+
+				s.appendChild(o);
+			}
+		}
+
+		function qualitySelectChange(pEvent)
+		{
+			var s = pEvent.target;
+			api.setVideoQuality(s.selectedIndex);
+		}
+
+		function log(pString)
+		{
+			var container = document.getElementById("iframeLog");
+
+			var p = document.createElement("p");
+			p.innerHTML = pString;
+			container.appendChild(p);
+
+			var hr = document.createElement("hr");
+			container.appendChild(hr);
+
+			container.scrollTop = container.scrollHeight;
 		}
 
 	</script>
