@@ -1,6 +1,20 @@
 KolorEyesIframeAPI
 ==================
 
+Important note!
+--------
+
+Kolor Eyes hosting in now [GoProVR](https://vr.gopro.com). (since 2016-04-18)
+If you where an IframeAPI user previous to 2016-04-18, you may have some change to apply to your to make it work!
+
+1/ All you iframe video url should begin by https://vr.gopro.com
+
+2/ Same thing for the script who loads the iframeAPI the url is now : 
+https://vr.gopro.com/API/KolorEyesPlayer/current/KolorEyesIframeAPI.min.js
+
+Take a look at the updated example! Have fun!
+
+
 Overview
 --------
 
@@ -15,7 +29,7 @@ You'll find examples on how to use the Kolor Eyes Iframe API in this GitHub repo
 Requirements
 ------------
 
-1. An account on Kolor's [360 video hosting platform](http://eyes.kolor.com/register). 
+1. An account on GoProVR [360 video hosting platform](https://vr.gopro.com/register). 
 2. An uploaded 360 video on our 360 video hosting solution.
 3. A browser that supports the HTML5 postMessage feature:
 
