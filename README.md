@@ -18,7 +18,7 @@ Take a look at the updated example! Have fun!
 Overview
 --------
 
-The Kolor Eyes Iframe API allows you to control an iFrame embeded Kolor Eyes player through on your website using Javascript.
+The Kolor Eyes Iframe API allows you to control a Kolor Eyes player in an iFrame embedded on your website, using Javascript.
 
 This API lets you do basic actions on the player like play, pause, change the volume level, retrieve information about current playback and so on.
 
