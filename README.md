@@ -29,7 +29,7 @@ You'll find examples on how to use the Kolor Eyes Iframe API in this GitHub repo
 Requirements
 ------------
 
-1. An account on GoProVR [360 video hosting platform](https://vr.gopro.com/register). 
+1. An account on GoProVR [360 video hosting platform](https://vr.gopro.com/). 
 2. An uploaded 360 video on our 360 video hosting solution.
 3. A browser that supports the HTML5 postMessage feature:
 
